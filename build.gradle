@@ -3,7 +3,7 @@
  */
 
 plugins {
-    id 'java-library'
+    id 'application'
     id 'maven-publish'
 }
 
@@ -21,20 +21,26 @@ repositories {
 }
 
 dependencies {
-    api libs.commons.beanutils.commons.beanutils
-    api libs.commons.logging.commons.logging
-    api libs.net.java.abeille.abeille
-    api libs.com.jgoodies.jgoodies.common
-    api libs.com.jgoodies.forms
-    api libs.com.formdev.flatlaf
-    api libs.com.thoughtworks.xstream.xstream
-    api libs.org.apache.ant.ant
+    implementation libs.commons.beanutils.commons.beanutils
+    implementation libs.commons.logging.commons.logging
+    implementation (libs.net.java.abeille.abeille) {
+        exclude group: "org.apache.batik", module: "com.springsource.org.apache.batik.ext.awt"
+    }
+    implementation libs.com.jgoodies.jgoodies.common
+    implementation libs.com.jgoodies.forms
+    implementation libs.com.formdev.flatlaf
+    implementation libs.com.thoughtworks.xstream.xstream
+    implementation libs.org.apache.ant.ant
 }
 
 group = 'net.sf.launch4j'
 version = '3.51'
 description = 'Launch4j'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+application {
+    mainClass = 'net.sf.launch4j.Main'
+}
 
 publishing {
     publications {
