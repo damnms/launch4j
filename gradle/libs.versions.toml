@@ -2,7 +2,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-com-formdev-flatlaf = "1.0"
+com-formdev-flatlaf = "1.6.5"
 com-jgoodies-forms = "1.2.1"
 com-jgoodies-jgoodies-common = "1.7.0"
 com-thoughtworks-xstream-xstream = "1.4.15"

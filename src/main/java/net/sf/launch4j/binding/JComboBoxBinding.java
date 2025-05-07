@@ -2,7 +2,7 @@
 	Launch4j (http://launch4j.sourceforge.net/)
 	Cross-platform Java application wrapper for creating Windows native executables.
 
-	Copyright (c) 2004, 2015 Grzegorz Kowal
+	Copyright (c) 2007 Ian Roberts
 	All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without modification,
@@ -38,37 +38,32 @@ package net.sf.launch4j.binding;
 
 import java.awt.Color;
 
-import javax.swing.JRadioButton;
+import javax.swing.JComboBox;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
 /**
- * @author Copyright (C) 2005 Grzegorz Kowal
+ * @author Copyright (C) 2007 Ian Roberts
  */
-public class JRadioButtonBinding implements Binding {
+public class JComboBoxBinding<T> implements Binding {
 	private final String _property;
-	private final JRadioButton[] _buttons;
+	private final JComboBox<T> _combo;
 	private final int _defaultValue;
 	private final Color _validColor;
 
-	public JRadioButtonBinding(String property, JRadioButton[] buttons, int defaultValue) {
-		if (property == null || buttons == null) {
+	public JComboBoxBinding(String property, JComboBox<T> combo, int defaultValue) {
+		if (property == null || combo == null) {
 			throw new NullPointerException();
 		}
-		for (int i = 0; i < buttons.length; i++) {
-			if (buttons[i] == null) {
-				throw new NullPointerException();
-			}
-		}
 		if (property.equals("")
-				|| buttons.length == 0
-				|| defaultValue < 0 || defaultValue >= buttons.length) {
+				|| combo.getItemCount() == 0
+				|| defaultValue < 0 || defaultValue >= combo.getItemCount()) {
 			throw new IllegalArgumentException();
 		}
 		_property = property;
-		_buttons = buttons;
+		_combo = combo;
 		_defaultValue = defaultValue;
-		_validColor = buttons[0].getBackground();
+		_validColor = combo.getBackground();
 	}
 
 	public String getProperty() {
@@ -84,7 +79,7 @@ public class JRadioButtonBinding implements Binding {
 			Integer i = (Integer) PropertyUtils.getProperty(bean, _property);
 			if (i == null) {
 				throw new BindingException(
-						Messages.getString("JRadioButtonBinding.property.null"));
+						Messages.getString("JComboBoxBinding.property.null"));
 			}
 			select(i.intValue());
 		} catch (Exception e) {
@@ -94,53 +89,31 @@ public class JRadioButtonBinding implements Binding {
 
 	public void get(IValidatable bean) {
 		try {
-			for (int i = 0; i < _buttons.length; i++) {
-				if (_buttons[i].isSelected()) {
-					PropertyUtils.setProperty(bean, _property, new Integer(i));
-					return;
-				}
-			}
-			throw new BindingException(
-					Messages.getString("JRadioButtonBinding.nothing.selected"));
+			PropertyUtils.setProperty(bean, _property, Integer.valueOf(_combo.getSelectedIndex()));
+			return;
 		} catch (Exception e) {
 			throw new BindingException(e);
 		}
 	}
 
 	private void select(int index) {
-		if (index < 0 || index >= _buttons.length) {
+		if (index < 0 || index >= _combo.getItemCount()) {
 			throw new BindingException(
-					Messages.getString("JRadioButtonBinding.index.out.of.bounds"));
+					Messages.getString("JComboBoxBinding.index.out.of.bounds"));
 		}
-		_buttons[index].setSelected(true);
+		_combo.setSelectedIndex(index);
 	}
 
 	public void markValid() {
-		for (int i = 0; i < _buttons.length; i++) {
-			if (_buttons[i].isSelected()) {
-				_buttons[i].setBackground(_validColor);
-				_buttons[i].requestFocusInWindow();
-				return;
-			}
-		}
-		throw new BindingException(
-				Messages.getString("JRadioButtonBinding.nothing.selected"));
+		_combo.setBackground(_validColor);
+		_combo.requestFocusInWindow();
 	}
 
 	public void markInvalid() {
-		for (int i = 0; i < _buttons.length; i++) {
-			if (_buttons[i].isSelected()) {
-				_buttons[i].setBackground(Binding.INVALID_COLOR);
-				return;
-			}
-		}
-		throw new BindingException(
-				Messages.getString("JRadioButtonBinding.nothing.selected"));
+		_combo.setBackground(Binding.INVALID_COLOR);
 	}
 	
 	public void setEnabled(boolean enabled) {
-		for (int i = 0; i < _buttons.length; i++) {
-			_buttons[i].setEnabled(enabled);
-		}
+		_combo.setEnabled(enabled);
 	}
 }
