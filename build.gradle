@@ -65,7 +65,7 @@ tasks.withType(Javadoc) {
 
 distributions {
     bin_linux64 {
-        distributionBaseName = project.name
+        distributionBaseName = project.name+"-linux64"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
             from shadowJar
