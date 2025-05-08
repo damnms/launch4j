@@ -35,13 +35,31 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
 
     - name: build
-      run: ./gradlew bin_linux64DistZip
+      run: ./gradlew bin_linux64DistZip bin_linux32DistZip bin_windows32DistZip bin_macosx_x86DistZip
 
-    - name: Upload build artifacts
+    - name: Upload build artifacts linux64
       uses: actions/upload-artifact@v4
       with:
         name: linux64
         path: build/distributions/launch4j-linux64-3.51.zip
+
+    - name: Upload build artifacts linux32
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux32
+        path: build/distributions/launch4j-linux32-3.51.zip
+
+    - name: Upload build artifacts windows32
+      uses: actions/upload-artifact@v4
+      with:
+        name: win32
+        path: build/distributions/launch4j-win32-3.51.zip
+
+    - name: Upload build artifacts macosx_x86
+      uses: actions/upload-artifact@v4
+      with:
+        name: macosx
+        path: build/distributions/launch4j-macosx_x86-3.51.zip
 
     - name: Release
       uses: softprops/action-gh-release@v2

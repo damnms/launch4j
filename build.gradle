@@ -86,6 +86,75 @@ distributions {
             }
         }
     }
+
+    bin_linux32 {
+        distributionBaseName = project.name+"-linux32"
+        contents {
+            // Copy the following jars to the lib/ directory in the distribution archive
+            from shadowJar
+            into('w32api') {
+                from fileTree('w32api')
+            }
+            into('w32api_jni') {
+                from fileTree('w32api_jni')
+            }
+            into('head_jni_BETA') {
+                from fileTree('head_jni_BETA')
+            }
+            into('head') {
+                from fileTree('head')
+            }
+            into('bin') {
+                from fileTree('bin/bin-linux32')
+            }
+        }
+    }
+
+    bin_windows32 {
+        distributionBaseName = project.name+"-win32"
+        contents {
+            // Copy the following jars to the lib/ directory in the distribution archive
+            from shadowJar
+            into('w32api') {
+                from fileTree('w32api')
+            }
+            into('w32api_jni') {
+                from fileTree('w32api_jni')
+            }
+            into('head_jni_BETA') {
+                from fileTree('head_jni_BETA')
+            }
+            into('head') {
+                from fileTree('head')
+            }
+            into('bin') {
+                from fileTree('bin/bin-win32')
+            }
+        }
+    }
+
+    bin_macosx_x86 {
+        distributionBaseName = project.name+"-macosx_x86"
+        contents {
+            // Copy the following jars to the lib/ directory in the distribution archive
+            from shadowJar
+            into('w32api') {
+                from fileTree('w32api')
+            }
+            into('w32api_jni') {
+                from fileTree('w32api_jni')
+            }
+            into('head_jni_BETA') {
+                from fileTree('head_jni_BETA')
+            }
+            into('head') {
+                from fileTree('head')
+            }
+            into('bin') {
+                from fileTree('bin/bin-macosx-x86')
+            }
+        }
+    }
 }
 
 tasks.shadowJar {
