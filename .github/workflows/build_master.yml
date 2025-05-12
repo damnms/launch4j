@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI with Maven
+name: Java CI with Gradle on master
 
 on:
   push:
@@ -41,25 +41,25 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: linux64
-        path: build/distributions/launch4j-linux64-3.51.zip
+        path: build/distributions/launch4j-linux64-*
 
     - name: Upload build artifacts linux32
       uses: actions/upload-artifact@v4
       with:
         name: linux32
-        path: build/distributions/launch4j-linux32-3.51.zip
+        path: build/distributions/launch4j-linux32-*
 
     - name: Upload build artifacts windows32
       uses: actions/upload-artifact@v4
       with:
         name: win32
-        path: build/distributions/launch4j-win32-3.51.zip
+        path: build/distributions/launch4j-win32-*
 
     - name: Upload build artifacts macosx_x86
       uses: actions/upload-artifact@v4
       with:
         name: macosx
-        path: build/distributions/launch4j-macosx_x86-3.51.zip
+        path: build/distributions/launch4j-macosx_x86-*
 
     - name: Release
       uses: softprops/action-gh-release@v2
