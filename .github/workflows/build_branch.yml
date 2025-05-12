@@ -1,0 +1,61 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Gradle on master
+
+on:
+  push:
+    branches: [ "feature/*" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: setup gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
+
+      - name: build
+        run: ./gradlew bin_linux64DistZip bin_linux32DistZip bin_windows32DistZip bin_macosx_x86DistZip
+
+      - name: Upload build artifacts linux64
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux64
+          path: build/distributions/launch4j-linux64-*
+
+      - name: Upload build artifacts linux32
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux32
+          path: build/distributions/launch4j-linux32-*
+
+      - name: Upload build artifacts windows32
+        uses: actions/upload-artifact@v4
+        with:
+          name: win32
+          path: build/distributions/launch4j-win32-*
+
+      - name: Upload build artifacts macosx_x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: macosx
+          path: build/distributions/launch4j-macosx_x86-*
+
+    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+    #- name: Update dependency graph
+    #  uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
