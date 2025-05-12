@@ -27,6 +27,14 @@ dependencies {
     implementation "commons-logging:commons-logging:1.3.5"
     implementation("net.java.abeille:abeille:3.0") {
         exclude group: "org.apache.batik", module: "com.springsource.org.apache.batik.ext.awt"
+        exclude group: "colt", module: "colt"
+        exclude group: "dom4j", module: "dom4j"
+        exclude group: "dsol", module: "dsol-xml"
+        exclude group: "javax.help", module: "javahelp"
+        exclude group: "jfree", module: "jfreechart"
+        exclude group: "jfree", module: "jcommon"
+        exclude group: "org.apache.mahout", module: "mahout-collections"
+        exclude group: "com.github.rwl", module: "optimization"
     }
     implementation "com.jgoodies:jgoodies-common:1.8.1"
     implementation "com.jgoodies:jgoodies-forms:1.9.0"
