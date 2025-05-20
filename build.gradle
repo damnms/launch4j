@@ -92,6 +92,12 @@ distributions {
             into('bin') {
                 from fileTree('bin/bin-linux64')
             }
+            into('.') {
+                from file('launch4j.sh')
+            }
+            into('.') {
+                from file('launch4jc.sh')
+            }
         }
     }
 
@@ -114,6 +120,12 @@ distributions {
             }
             into('bin') {
                 from fileTree('bin/bin-linux32')
+            }
+            into('.') {
+                from file('launch4j.sh')
+            }
+            into('.') {
+                from file('launch4jc.sh')
             }
         }
     }
@@ -163,6 +175,11 @@ distributions {
             }
         }
     }
+}
+
+tasks.register("createWindowsExe") {
+    dependsOn(tasks.shadowJar, tasks.bin_windows32DistZip)
+    "java -jar launch4j*.jar launch4j_config.xml".execute()
 }
 
 tasks.shadowJar {

@@ -85,7 +85,7 @@ public class MainFrame extends JFrame {
 
 	public static void createInstance() {
 		try {
-			FlatLightLaf.install();
+			FlatLightLaf.setup();
 			_instance = new MainFrame();
 		} catch (Exception e) {
 			System.err.println(e);
