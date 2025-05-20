@@ -179,7 +179,9 @@ distributions {
 
 tasks.register("createWindowsExe") {
     dependsOn(tasks.shadowJar, tasks.bin_windows32DistZip)
-    "java -jar launch4j*.jar launch4j_config.xml".execute()
+    doLast {
+        "java -jar launch4j*.jar launch4j_config.xml".execute()
+    }
 }
 
 tasks.shadowJar {
