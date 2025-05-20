@@ -177,10 +177,14 @@ distributions {
     }
 }
 
-tasks.register("createWindowsExe") {
+tasks.register("createWindowsExe", Zip) {
     dependsOn(tasks.shadowJar, tasks.bin_windows32DistZip)
     doLast {
         "java -jar launch4j*.jar launch4j_config.xml".execute()
+    }
+    from(zipTree("./build/distributions/launch4j-win32*.zip")) {
+        // But leave out the file we want to replace.
+        include("./build/distributions/launch4j-win32-3.50.1.0.0/launch4j.exe")
     }
 }
 
