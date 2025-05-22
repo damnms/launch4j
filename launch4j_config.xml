@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>./build/distributions/launch4j-win32-3.50.1.0.0/launch4j-3.50.1.0.0.jar</jar>
+  <jar>./build/libs/launch4j.jar</jar>
   <outfile>./launch4j.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
