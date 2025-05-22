@@ -195,7 +195,8 @@ tasks.register("extractLinux32Distri", Copy) {
 tasks.register("createWindowsExe", Exec) {
     dependsOn(tasks.extractLinux32Distri)
     workingDir("${buildDir}/distributions/linux32distri/launch4j-linux32")
-    commandLine('java', '-jar', '-Djava.awt.headless=true', "./launch4j.jar", file("${rootDir}/launch4j_config.xml"))
+    executable "java"
+    args('-jar', '-Djava.awt.headless=true', "./launch4j.jar", file("${rootDir}/launch4j_config.xml"))
 }
 
 tasks.shadowJar {
