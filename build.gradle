@@ -195,7 +195,7 @@ tasks.register("extractLinux32Distri", Copy) {
 tasks.register("createWindowsExe", Exec) {
     dependsOn(tasks.extractLinux32Distri)
     workingDir("${buildDir}/distributions/linux32distri/launch4j-linux32")
-    executable "java"
+    executable "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.15-6/x64/bin/java"
     args('-jar', '-Djava.awt.headless=true', "./launch4j.jar", file("${rootDir}/launch4j_config.xml"))
 }
 
