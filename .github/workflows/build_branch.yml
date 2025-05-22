@@ -30,7 +30,7 @@ jobs:
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
 
       - name: build
-        run: ./gradlew bin_linux64DistZip bin_linux32DistZip bin_windows32DistZip bin_macosx_x86DistZip createWindowsExe
+        run: ./gradlew bin_linux64DistZip bin_linux32DistZip bin_windows32DistZip bin_macosx_x86DistZip
 
       - name: Upload build artifacts linux64
         uses: actions/upload-artifact@v4

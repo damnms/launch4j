@@ -75,7 +75,7 @@ tasks.withType(Javadoc).configureEach {
 
 distributions {
     bin_linux64 {
-        distributionBaseName = project.name+"-linux64"
+        distributionBaseName = project.name+"-linux64-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
             from shadowJar
@@ -104,7 +104,7 @@ distributions {
     }
 
     bin_linux32 {
-        distributionBaseName = project.name+"-linux32"
+        distributionBaseName = project.name+"-linux32-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
             from shadowJar
@@ -133,7 +133,7 @@ distributions {
     }
 
     bin_windows32 {
-        distributionBaseName = project.name+"-win32"
+        distributionBaseName = project.name+"-win32-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
             from shadowJar
@@ -160,7 +160,7 @@ distributions {
     }
 
     bin_macosx_x86 {
-        distributionBaseName = project.name+"-macosx_x86"
+        distributionBaseName = project.name+"-macosx_x86-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
             from shadowJar
