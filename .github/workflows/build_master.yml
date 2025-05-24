@@ -61,7 +61,7 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
-        files: build/distributions/**
+        files: build/distributions/*.zip
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
