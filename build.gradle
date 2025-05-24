@@ -44,7 +44,7 @@ dependencies {
 }
 
 group = 'net.sf.launch4j'
-version = '3.50.1.0.0'
+version = '3.50.1.0.1'
 description = 'Launch4j'
 java.sourceCompatibility = JavaVersion.VERSION_17
 
