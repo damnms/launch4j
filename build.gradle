@@ -73,7 +73,7 @@ tasks.withType(Javadoc).configureEach {
 
 distributions {
     bin_linux64 {
-        distributionBaseName = project.name+"-linux64"
+        distributionBaseName = project.name + "-linux64-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
             from shadowJar
@@ -92,11 +92,17 @@ distributions {
             into('bin') {
                 from fileTree('bin/bin-linux64')
             }
+            into('.') {
+                from file('launch4j.sh')
+            }
+            into('.') {
+                from file('launch4jc.sh')
+            }
         }
     }
 
     bin_linux32 {
-        distributionBaseName = project.name+"-linux32"
+        distributionBaseName = project.name + "-linux32-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
             from shadowJar
@@ -113,13 +119,19 @@ distributions {
                 from fileTree('head')
             }
             into('bin') {
-                from fileTree('bin/bin-linux32')
+                from fileTree('bin/bin-linux')
+            }
+            into('.') {
+                from file('launch4j.sh')
+            }
+            into('.') {
+                from file('launch4jc.sh')
             }
         }
     }
 
     bin_windows32 {
-        distributionBaseName = project.name+"-win32"
+        distributionBaseName = project.name + "-win32-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
             from shadowJar
@@ -138,11 +150,15 @@ distributions {
             into('bin') {
                 from fileTree('bin/bin-win32')
             }
+            into('.') {
+                from file('launch4j.exe')
+            }
         }
+
     }
 
     bin_macosx_x86 {
-        distributionBaseName = project.name+"-macosx_x86"
+        distributionBaseName = project.name + "-macosx_x86-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
             from shadowJar
@@ -165,11 +181,40 @@ distributions {
     }
 }
 
+tasks.register("extractLinux32Distri", Copy) {
+    dependsOn(tasks.bin_linux32DistZip)
+    def zipFile = file(tasks.bin_linux32DistZip.outputs.files[0])
+    def outputDir = file("${buildDir}/distributions/linux32distri/")
+
+    from zipTree(zipFile)
+    into outputDir
+    eachFile {
+        ArrayList<String> segments = relativePath.segments
+        if(segments.get(0).startsWith("launch4j-linux"))
+            segments.remove(0);
+        String[] stockArr = new String[segments.size()];
+        stockArr = segments.toArray(stockArr);
+        relativePath = new RelativePath(true, stockArr)
+    }
+}
+
+tasks.register("createWindowsExe", Exec) {
+    dependsOn(tasks.extractLinux32Distri)
+    workingDir("${buildDir}/distributions/linux32distri/");
+    commandLine("java", '-jar', '-Djava.awt.headless=true', "./launch4j.jar", file("${rootDir}/launch4j_config.xml"))
+
+}
+
 tasks.shadowJar {
     mainClassName = "net.sf.launch4j.Main"
     archiveClassifier = null
+    version = null
 }
 
 tasks.bin_linux64DistZip {
     dependsOn shadowJar
+}
+
+tasks.bin_windows32DistZip {
+    dependsOn tasks.createWindowsExe
 }
