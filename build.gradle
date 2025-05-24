@@ -186,21 +186,21 @@ tasks.register("extractLinux32Distri", Copy) {
     def zipFile = file(tasks.bin_linux32DistZip.outputs.files[0])
     def outputDir = file("${buildDir}/distributions/linux32distri/")
 
-    from zipTree(zipFile).asFileTree
+    from zipTree(zipFile)
     into outputDir
     eachFile {
-        relativePath = relativePath.replaceFirst("launch4j-linux32-.*/")
-        print("RELATIVEPATH:"  + relativePath)
+        ArrayList<String> segments = relativePath.segments
+        if(segments.get(0).startsWith("launch4j-linux"))
+            segments.remove(0);
+        String[] stockArr = new String[segments.size()];
+        stockArr = segments.toArray(stockArr);
+        relativePath = new RelativePath(true, stockArr)
     }
 }
 
 tasks.register("createWindowsExe", Exec) {
-    def version = ""
-    doFirst {
-        version = rootProject.version
-    }
     dependsOn(tasks.extractLinux32Distri)
-    workingDir("${buildDir}/distributions/linux32distri/launch4j-linux32-${version}");
+    workingDir("${buildDir}/distributions/linux32distri/");
     commandLine("java", '-jar', '-Djava.awt.headless=true', "./launch4j.jar", file("${rootDir}/launch4j_config.xml"))
 
 }
