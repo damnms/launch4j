@@ -180,23 +180,12 @@ distributions {
     }
 }
 
-tasks.register("extractLinux32Distri", Copy) {
-    dependsOn(tasks.bin_linux32DistZip)
-    def zipFile = file(tasks.bin_linux32DistZip.outputs.files[0])
-    def outputDir = file("${buildDir}/distributions/linux32distri/")
-
-    from zipTree(zipFile)
-    into outputDir
-    eachFile {
-        new RelativePath(relativePath.isFile(), relativePath.segments.tail())
-    }
-}
-
-tasks.register("createWindowsExe", Exec) {
-    dependsOn(tasks.extractLinux32Distri)
-    workingDir("${buildDir}/distributions/linux32distri/");
-    commandLine("java", '-jar', '-Djava.awt.headless=true', "./launch4j.jar", file("${rootDir}/launch4j_config.xml"))
-
+tasks.register("createWindowsExe", JavaExec) {
+    dependsOn(tasks.shadowJar)
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'net.sf.launch4j.Main'
+    jvmArgs "-Dlaunch4j.bindir=./bin/bin-linux"
+    args 'launch4j_config.xml'
 }
 
 tasks.shadowJar {
@@ -206,9 +195,18 @@ tasks.shadowJar {
 }
 
 tasks.bin_linux64DistZip {
-    dependsOn shadowJar
+    dependsOn tasks.shadowJar
+}
+
+
+tasks.bin_linux32DistZip {
+    dependsOn tasks.shadowJar
 }
 
 tasks.bin_windows32DistZip {
     dependsOn tasks.createWindowsExe
+}
+
+tasks.bin_macosx_x86DistZip {
+    dependsOn tasks.shadowJar
 }
