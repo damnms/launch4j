@@ -36,25 +36,29 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux64
-          path: build/distributions/launch4j-linux64-*
+          path: build/distributions/launch4j-linux64-*.zip
+          if-no-files-found: error
 
       - name: Upload build artifacts linux32
         uses: actions/upload-artifact@v4
         with:
           name: linux32
-          path: build/distributions/launch4j-linux32-*
+          path: build/distributions/launch4j-linux32-*.zip
+          if-no-files-found: error
 
       - name: Upload build artifacts windows32
         uses: actions/upload-artifact@v4
         with:
           name: win32
-          path: build/distributions/launch4j-win32-*
+          path: build/distributions/launch4j-win32-*.zip
+          if-no-files-found: error
 
       - name: Upload build artifacts macosx_x86
         uses: actions/upload-artifact@v4
         with:
           name: macosx
-          path: build/distributions/launch4j-macosx_x86-*
+          path: build/distributions/launch4j-macosx_x86-*.zip
+          if-no-files-found: error
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph

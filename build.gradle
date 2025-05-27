@@ -134,7 +134,6 @@ distributions {
         distributionBaseName = project.name + "-win32-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
-            from shadowJar
             into('w32api') {
                 from fileTree('w32api')
             }
@@ -181,28 +180,12 @@ distributions {
     }
 }
 
-tasks.register("extractLinux32Distri", Copy) {
-    dependsOn(tasks.bin_linux32DistZip)
-    def zipFile = file(tasks.bin_linux32DistZip.outputs.files[0])
-    def outputDir = file("${buildDir}/distributions/linux32distri/")
-
-    from zipTree(zipFile)
-    into outputDir
-    eachFile {
-        ArrayList<String> segments = relativePath.segments
-        if(segments.get(0).startsWith("launch4j-linux"))
-            segments.remove(0);
-        String[] stockArr = new String[segments.size()];
-        stockArr = segments.toArray(stockArr);
-        relativePath = new RelativePath(true, stockArr)
-    }
-}
-
-tasks.register("createWindowsExe", Exec) {
-    dependsOn(tasks.extractLinux32Distri)
-    workingDir("${buildDir}/distributions/linux32distri/");
-    commandLine("java", '-jar', '-Djava.awt.headless=true', "./launch4j.jar", file("${rootDir}/launch4j_config.xml"))
-
+tasks.register("createWindowsExe", JavaExec) {
+    dependsOn(tasks.shadowJar)
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'net.sf.launch4j.Main'
+    jvmArgs "-Dlaunch4j.bindir=./bin/bin-linux"
+    args 'launch4j_config.xml'
 }
 
 tasks.shadowJar {
@@ -212,9 +195,18 @@ tasks.shadowJar {
 }
 
 tasks.bin_linux64DistZip {
-    dependsOn shadowJar
+    dependsOn tasks.shadowJar
+}
+
+
+tasks.bin_linux32DistZip {
+    dependsOn tasks.shadowJar
 }
 
 tasks.bin_windows32DistZip {
     dependsOn tasks.createWindowsExe
+}
+
+tasks.bin_macosx_x86DistZip {
+    dependsOn tasks.shadowJar
 }
