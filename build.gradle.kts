@@ -148,16 +148,18 @@ distributions {
 
 tasks {
 
+    val manifestJar = java.manifest {
+        attributes(
+            "Main-Class" to "net.sf.launch4j.Main"
+        )
+    }
+
     jar {
-        manifest {
-            attributes(
-                "Main-Class" to "net.sf.launch4j.Main"
-            )
-        }
+        manifest = manifestJar
     }
 
     shadowJar {
-        manifest.inheritFrom(jar.get().manifest)
+        manifest.inheritFrom(manifestJar)
         archiveClassifier = null
         version = ""
     }
@@ -176,7 +178,7 @@ tasks {
     register<JavaExec>("createWindowsExe") {
         dependsOn("shadowJar")
         classpath = sourceSets["main"].runtimeClasspath
-        mainClass.set("net.sf.launch4j.Main")
+        mainClass = application.mainClass
         systemProperty("launch4j.bindir", "./bin/bin-linux")
         args("launch4j_config.xml")
     }
