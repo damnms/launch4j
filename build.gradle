@@ -134,7 +134,6 @@ distributions {
         distributionBaseName = project.name + "-win32-${version}"
         contents {
             // Copy the following jars to the lib/ directory in the distribution archive
-            from shadowJar
             into('w32api') {
                 from fileTree('w32api')
             }
@@ -189,12 +188,7 @@ tasks.register("extractLinux32Distri", Copy) {
     from zipTree(zipFile)
     into outputDir
     eachFile {
-        ArrayList<String> segments = relativePath.segments
-        if(segments.get(0).startsWith("launch4j-linux"))
-            segments.remove(0);
-        String[] stockArr = new String[segments.size()];
-        stockArr = segments.toArray(stockArr);
-        relativePath = new RelativePath(true, stockArr)
+        new RelativePath(relativePath.isFile(), relativePath.segments.tail())
     }
 }
 
