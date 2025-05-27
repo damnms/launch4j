@@ -1,18 +1,14 @@
 plugins {
-    id("distribution")
-    id("application")
+    distribution
+    application
     id("maven-publish")
     id("com.gradleup.shadow") version "9.0.0-beta13"
 }
 
 repositories {
-    mavenLocal()
-    maven {
-        url = uri("https://simulation.tudelft.nl/maven/")
-    }
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    mavenCentral()
+    maven("https://simulation.tudelft.nl/maven/")
+    maven("https://repo.maven.apache.org/maven2/")
 }
 
 dependencies {
@@ -41,8 +37,9 @@ version = "3.50.1.0.1"
 description = "Launch4j"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 distributions {
@@ -165,20 +162,8 @@ tasks {
         version = ""
     }
 
-    named("bin_linux64DistZip") {
-        dependsOn("shadowJar")
-    }
-
-    named("bin_linux32DistZip") {
-        dependsOn("shadowJar")
-    }
-
     named("bin_windows32DistZip") {
-        dependsOn("shadowJar", "createWindowsExe")
-    }
-
-    named("bin_macosx_x86DistZip") {
-        dependsOn("shadowJar")
+        dependsOn("createWindowsExe")
     }
 
     withType<JavaCompile> {
@@ -192,7 +177,7 @@ tasks {
         dependsOn("shadowJar")
         classpath = sourceSets["main"].runtimeClasspath
         mainClass.set("net.sf.launch4j.Main")
-        jvmArgs("-Dlaunch4j.bindir=./bin/bin-linux")
+        systemProperty("launch4j.bindir", "./bin/bin-linux")
         args("launch4j_config.xml")
     }
 }
