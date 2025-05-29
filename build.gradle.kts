@@ -168,16 +168,16 @@ tasks {
         dependsOn("createWindowsExe")
     }
 
-    withType<JavaCompile> {
+    withType<JavaCompile>().configureEach {
         options.encoding = "UTF-8"
     }
-    withType<Javadoc> {
+    withType<Javadoc>().configureEach {
         options.encoding = "UTF-8"
     }
 
     register<JavaExec>("createWindowsExe") {
         dependsOn("shadowJar")
-        classpath = sourceSets["main"].runtimeClasspath
+        classpath(sourceSets.main.map { it.runtimeClasspath })
         mainClass = application.mainClass
         systemProperty("launch4j.bindir", "./bin/bin-linux")
         args("launch4j_config.xml")
