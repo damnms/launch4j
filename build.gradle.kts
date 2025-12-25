@@ -1,8 +1,10 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     distribution
     application
     id("maven-publish")
-    id("com.gradleup.shadow") version "9.0.0-beta13"
+    id("com.gradleup.shadow") version "9.2.0" //9.3.0 is broken atm -> stack overflow error
 }
 
 repositories {
@@ -12,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation("commons-beanutils:commons-beanutils:1.10.1")
+    implementation("commons-beanutils:commons-beanutils:1.11.0")
     implementation("commons-logging:commons-logging:1.3.5")
     implementation("net.java.abeille:abeille:3.0") {
         exclude(group = "org.apache.batik", module = "com.springsource.org.apache.batik.ext.awt")
@@ -27,7 +29,7 @@ dependencies {
     }
     implementation("com.jgoodies:jgoodies-common:1.8.1")
     implementation("com.jgoodies:jgoodies-forms:1.9.0")
-    implementation("com.formdev:flatlaf:1.6.5")
+    implementation("com.formdev:flatlaf:3.7")
     implementation("com.thoughtworks.xstream:xstream:1.4.21")
     implementation("org.apache.ant:ant:1.10.15")
 }
@@ -42,11 +44,12 @@ java {
     }
 }
 
+
 distributions {
-    create("bin_linux64") {
+    register("bin_linux64") {
         distributionBaseName.set("${project.name}-linux64-${version}")
         contents {
-            from(tasks.named("shadowJar"))
+            from(tasks.named<ShadowJar>("shadowJar").flatMap { it.archiveFile })
             into("w32api") {
                 from(fileTree("w32api"))
             }
@@ -71,10 +74,10 @@ distributions {
         }
     }
 
-    create("bin_linux32") {
+    register("bin_linux32") {
         distributionBaseName.set("${project.name}-linux32-${version}")
         contents {
-            from(tasks.named("shadowJar"))
+            from(tasks.named<ShadowJar>("shadowJar").flatMap { it.archiveFile })
             into("w32api") {
                 from(fileTree("w32api"))
             }
@@ -99,7 +102,7 @@ distributions {
         }
     }
 
-    create("bin_windows32") {
+    register("bin_windows32") {
         distributionBaseName.set("${project.name}-win32-${version}")
         contents {
             into("w32api") {
@@ -123,10 +126,10 @@ distributions {
         }
     }
 
-    create("bin_macosx_x86") {
+    register("bin_macosx_x86") {
         distributionBaseName.set("${project.name}-macosx_x86-${version}")
         contents {
-            from(tasks.named("shadowJar"))
+            from(tasks.named<ShadowJar>("shadowJar").flatMap { it.archiveFile })
             into("w32api") {
                 from(fileTree("w32api"))
             }
