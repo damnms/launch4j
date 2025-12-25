@@ -35,7 +35,7 @@ dependencies {
 }
 
 group = "net.sf.launch4j"
-version = "3.50.1.0.1"
+version = "3.50.1.1.0"
 description = "Launch4j"
 
 java {
